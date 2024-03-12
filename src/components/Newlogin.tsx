@@ -14,13 +14,11 @@ const Newlogin: React.FC = () => {
                     <div className='mb-5'>
                         
                         <input type="password" placeholder='enter staff id' className='form-control p-2 ' />
-                        <div className="password-toggle" onClick={() => setShowStaffId(!showStaffId)}>
-                        {showStaffId ? <BsEyeSlash /> : <BsEye />}
-                        </div>
+                        {/*  */}
                     </div>
                    
                     <div className='d-grid'>
-                        <button className='btn btn-primary'style={{backgroundColor: '#5CA7B7'}}>Sign in</button>
+                        <button className='btn 'style={{backgroundColor: '#5CA7B7', color: 'white'}}>Sign in</button>
                     </div>
                 </form>
             </div>
