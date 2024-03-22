@@ -1,16 +1,17 @@
-.btn-outline-primary:hover,
+/* .btn-outline-primary:hover,
 .btn-outline-primary:focus,
 .btn-outline-primary:active {
     background-color: #5CA7B7;
     border-color: #B0C8ED;
-    color: white; /* Set text color to white on hover, focus, and active states */
-}
-
+    color: white; 
+} */
+/* Set text color to white on hover, focus, and active states */
 .container {
     border-radius: 30px; /* Adjust the value as needed */
-    overflow: hidden; /*Ensure content inside the container respects the rounded corners */
+    overflow: scroll; /*Ensure content inside the container respects the rounded corners */
 }
 
-.container_1 {
-    border-radius: 10px;
+.container_table {
+    border-radius: 30px;
+    overflow: scroll;
 }
