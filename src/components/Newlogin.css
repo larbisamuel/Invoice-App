@@ -1,8 +1,8 @@
-.form_container{
+/* .form_container{
   width: 30%;
   height: 60%
   
-}
+} */
 
 @media screen and (max-width:1000px) {
   .form_container{
@@ -22,3 +22,6 @@
   border-style: none;
 }
 
+.logo{
+  width:25px
+}
