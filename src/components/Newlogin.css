@@ -25,3 +25,11 @@
 .logo{
   width:25px
 }
+
+.icon-container {
+  position: absolute; /* Position the icon absolutely */
+  right: 10px; /* Adjust right to position within textfield */
+  top: 50%; /* Center the icon vertically */
+  transform: translateY(-50%); /* Offset vertical positioning */
+  cursor: pointer;
+}

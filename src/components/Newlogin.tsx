@@ -6,6 +6,16 @@ import invoice_logo from '../assets/invoice_logo.jpg'
 
 const Newlogin: React.FC = () => {
     const [showStaffId, setShowStaffId] = useState(false);
+    const [staffId, setStaffId] = useState('');
+
+    const handleStaffIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setStaffId(event.target.value);
+    }
+
+    const togglePasswordVisibility = ()=> {
+        setShowStaffId(!showStaffId);
+    }
+
     return (
         <div className='login template d-flex justify-content-center align-items-center vh-100'>
             <div className='form_container p-3 rounded-4 bg-white shadow-lg'style={{ minHeight: '500px', width: '500px' }}>
@@ -16,9 +26,18 @@ const Newlogin: React.FC = () => {
                     </div>
                     <h6 className='text-center p-4' style={{fontFamily: "inter", fontSize: "20px"}}>Enter your Staff Id to login</h6>
                     <div className='mb-4'>
-                        
-                        <input type="password" placeholder='enter staff id' className='form-control p-1 text-center' />
-                        {/*  */}
+                       <div style={{position: 'relative'}}>
+                        <input type={showStaffId ? 'text' : 'password'} 
+                        placeholder='enter staff id' 
+                        className='form-control p-1 text-center' 
+                        value={staffId} onChange={handleStaffIdChange} />
+                        <span onClick={togglePasswordVisibility} 
+                        // style={{ cursor: 'pointer' }}
+                        className='icon-container'
+                        >
+                            {showStaffId ? <BsEyeSlash /> : <BsEye />}
+                        </span>
+                        </div>   
                     </div>
                    
                     <div className='d-grid mt-auto'>
