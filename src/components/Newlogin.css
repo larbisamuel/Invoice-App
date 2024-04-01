@@ -1,8 +1,8 @@
-.form_container{
+/* .form_container{
   width: 30%;
   height: 60%
   
-}
+} */
 
 @media screen and (max-width:1000px) {
   .form_container{
@@ -22,3 +22,14 @@
   border-style: none;
 }
 
+.logo{
+  width:25px
+}
+
+.icon-container {
+  position: absolute; /* Position the icon absolutely */
+  right: 10px; /* Adjust right to position within textfield */
+  top: 50%; /* Center the icon vertically */
+  transform: translateY(-50%); /* Offset vertical positioning */
+  cursor: pointer;
+}
