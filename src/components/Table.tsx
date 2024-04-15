@@ -29,7 +29,7 @@ const Table: React.FC = () => {
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('New item:', newItem); // For now, just log the data
+    console.log('New item:', newItem); 
     setItems([...items, newItem]);
     setShowAddItemModal(false);
     setNewItem({ itemName: '', actualQuantity: 0, receivedQuantity: 0, remainingStock: 0 });
@@ -61,6 +61,10 @@ const Table: React.FC = () => {
   const handleEditValueChange = (index: number, columnKey: keyof Item, newValue: string | number) => {
     setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, [columnKey]: newValue } : item)));
   };
+
+  const handleDownload = ()=> {
+    
+  }
 
 //   const handleSearch = async () => {
 //     try {
@@ -94,6 +98,10 @@ const navigate = useNavigate();
 const handleLogout = () => {
   navigate('/');
   alert('You are logged out!')
+}
+
+const handleAddedItems = () => {
+  alert('Item added successfully!')
 }
 
   return (
@@ -204,7 +212,7 @@ const handleLogout = () => {
         </table>
       </div>
       <div className=' d-md-flex justify-content-md-end'>
-        <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }}>Download <BsDownload /></button>
+        <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
       </div>
 
       <Modal show={showAddItemModal} onHide={() => setShowAddItemModal(false)}>
@@ -227,7 +235,7 @@ const handleLogout = () => {
             </div>  
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>Close</button>
-              <button type="submit" className="btn btn-primary">Add Item</button>
+              <button type="submit" className="btn btn-primary" onClick={handleAddedItems}>Add Item</button>
             </div>
           </form>
         </Modal.Body>
@@ -238,3 +246,4 @@ const handleLogout = () => {
 
 
 export default Table;
+

@@ -25,7 +25,7 @@ const Inv_Pdf: React.FC = () => {
                 <span className='align-items-right' style={{fontFamily: 'times new roman'}}><h4>Invoice #1</h4></span>
             </div>
         </nav>
-
+        <div>
         <div className='mt-5 p-3' style={{fontFamily:"inter"}}>
             <h4>P.O. Box 164, Ablekuma,</h4>
             <h4>Accra-Ghana</h4>
@@ -34,7 +34,9 @@ const Inv_Pdf: React.FC = () => {
 
         <div className='p-3'style={{fontFamily:"inter"}}>
             <h5>Behind Melcom Ghana</h5>
+        </div> 
         </div>
+        
         <div className='table-responsive mt-5' >
         <table className="table table-bordered rounded">
             <thead className="table-light">
