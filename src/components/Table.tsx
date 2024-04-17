@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; // Importing icons
 import { Modal } from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-// import axios from 'axios';
 
 interface Item {
   itemName: string;
@@ -15,6 +13,8 @@ interface Item {
 }
 
 const Table: React.FC = () => {
+  const ITEMS_PER_PAGE = 5; // Number of items to display per page
+
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [newItem, setNewItem] = useState<Item>({
     itemName: '',
@@ -26,20 +26,21 @@ const Table: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // Current page number
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('New item:', newItem); // For now, just log the data
+    console.log('New item:', newItem);
     setItems([...items, newItem]);
     setShowAddItemModal(false);
     setNewItem({ itemName: '', actualQuantity: 0, receivedQuantity: 0, remainingStock: 0 });
   };
 
+  
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setNewItem((prevItem) => ({ ...prevItem, [name]: value }));
   };
-
   const toggleEditRow = (index: number) => {
     if (editableRows.includes(index)) {
       setEditableRows(editableRows.filter((rowIndex) => rowIndex !== index));
@@ -62,48 +63,33 @@ const Table: React.FC = () => {
     setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, [columnKey]: newValue } : item)));
   };
 
-//   const handleSearch = async () => {
-//     try {
-//       const response = await axios.get('http://localhost:5000/api/search', {
-//         params: {
-//           query: searchTerm,
-//           fields: ['name', 'dateofbirth', 'residenceaddress', 'occupation', 'phonenumber', 'maritalstatus'],
-//         },
-//       });
+  const handleDownload = ()=> {
+    
+  }
+  const navigate = useNavigate();
 
-//       if (response && response.data) {
-//         const data = response.data;
-//         setSearchResults(data);
-//       } else {
-//         console.error('API response is missing data.');
-//       }
-//       const data = response.data;
-//       //validate the search query
-//       if (!searchTerm || searchTerm.length < 3) {
-//         console.error('Please enter at least 3 characters');
-//         return;
-//       }
+  const handleLogout = () => {
+    navigate('/');
+    alert('You are logged out!')
+  }
+  
+  const handleAddedItems = () => {
+    alert('Item added successfully!')
+  }
 
-//       setSearchResults(data);
-//     } catch (error) {
-//       console.error('Error searching:', error);
-//     }
-//   };
-const navigate = useNavigate();
-
-const handleLogout = () => {
-  navigate('/');
-  alert('You are logged out!')
-}
+  // Calculate the range of items to display for the current page
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, items.length);
 
   return (
     <div className='mt-5 p-3 container shadow-lg'>
+      
       <div className=' d-md-flex justify-content-md-end'>
         <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={handleLogout}>Logout</button>
       </div>
       <div className='mt-3'>
         <div className="input-group">
-          <span className="input-group-text"><BsSearch /></span> {/* Search icon */}
+          <span className="input-group-text"><BsSearch /></span> 
           <input type="text" className="form-control" style={{ maxWidth: '160px' }} placeholder="Search item" />
           <button className='btn ms-2 rounded-2 ' style={{ backgroundColor: '#110f0f', color: 'white' }}>Search</button>
         </div>
@@ -116,10 +102,10 @@ const handleLogout = () => {
           </div>
         </div>
       </div>
-
       <div className="table-responsive container_table shadow-lg rounded mt-3 mb-3">
         <table className="table table-bordered ">
           <thead>
+            {/* Table header */}
             <tr>
               <th scope="col">ITEM NAME</th>
               <th scope="col">ACTUAL QTY(pcs)</th>
@@ -129,7 +115,8 @@ const handleLogout = () => {
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {items.slice(startIndex, endIndex).map((item, index) => (
+              // Render table rows
               <tr key={index}>
                 {/* <td>{renderTableCell(item.itemName, index, 'itemName')}</td>
                 <td>{renderTableCell(item.actualQuantity, index, 'actualQuantity')}</td>
@@ -204,9 +191,23 @@ const handleLogout = () => {
         </table>
       </div>
       <div className=' d-md-flex justify-content-md-end'>
-        <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }}>Download <BsDownload /></button>
+        <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
       </div>
-
+      {/* Pagination controls */}
+      <div className="pagination">
+        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+          Prev
+        </button>
+        {Array.from({ length: Math.ceil(items.length / ITEMS_PER_PAGE) }, (_, i) => (
+          <button key={i} onClick={() => setCurrentPage(i + 1)} disabled={currentPage === i + 1} className='btn btn-primary'>
+            {i + 1}
+          </button>
+        ))}
+        <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(items.length / ITEMS_PER_PAGE)}>
+          Next
+        </button>
+      </div>
+      {/* Modal  */}
       <Modal show={showAddItemModal} onHide={() => setShowAddItemModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Add New Item</Modal.Title>
@@ -227,7 +228,7 @@ const handleLogout = () => {
             </div>  
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>Close</button>
-              <button type="submit" className="btn btn-primary">Add Item</button>
+              <button type="submit" className="btn btn-primary" onClick={handleAddedItems}>Add Item</button>
             </div>
           </form>
         </Modal.Body>
@@ -235,6 +236,5 @@ const handleLogout = () => {
     </div>
   );
 };
-
 
 export default Table;

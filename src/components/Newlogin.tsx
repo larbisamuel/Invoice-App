@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import './Newlogin.css';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import invoice_logo from '../assets/invoice_logo.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const Newlogin: React.FC = () => {
     const [showStaffId, setShowStaffId] = useState(false);
@@ -15,10 +16,17 @@ const Newlogin: React.FC = () => {
     const togglePasswordVisibility = ()=> {
         setShowStaffId(!showStaffId);
     }
+    
+    const navigate = useNavigate();
+
+    const handleSignIn = () => {
+        navigate('/Table');
+        alert('Login successful!')
+    } 
 
     return (
         <div className='login template d-flex justify-content-center align-items-center vh-100'>
-            <div className='form_container p-3 rounded-4 bg-white shadow-lg'style={{ minHeight: '500px', width: '500px' }}>
+            <div className='form_container p-3 rounded-4 shadow-lg'style={{ minHeight: '500px', width: '500px',backgroundColor: "#fffcfa" }}>
                 <form>
                     <h3 className='text-center p-3 ' style={{fontFamily: 'times new roman'}}>Welcome Admin!</h3>
                     <div className='text-center mb-5' >
@@ -41,7 +49,7 @@ const Newlogin: React.FC = () => {
                     </div>
                    
                     <div className='d-grid mt-auto'>
-                        <button className='btn 'style={{backgroundColor: '#5CA7B7', color: 'white', fontFamily: 'times new roman', fontSize: "25px"}}>Sign in</button>
+                        <button className='btn 'style={{backgroundColor: '#5CA7B7', color: 'white', fontFamily: 'times new roman', fontSize: "25px"}} onClick={handleSignIn}>Sign in</button>
                     </div>
                 </form>
             </div>
