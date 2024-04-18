@@ -53,6 +53,8 @@ const Newlogin: React.FC = () => {
                     </div>
                 </form>
             </div>
+            
+            
         </div>
     );
 }

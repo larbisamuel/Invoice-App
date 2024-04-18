@@ -3,6 +3,7 @@ import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-ico
 import { Modal } from 'react-bootstrap';
 // import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+ 
 
 interface Item {
   itemName: string;
@@ -41,6 +42,8 @@ const Table: React.FC = () => {
     const { name, value } = event.target;
     setNewItem((prevItem) => ({ ...prevItem, [name]: value }));
   };
+  
+
   const toggleEditRow = (index: number) => {
     if (editableRows.includes(index)) {
       setEditableRows(editableRows.filter((rowIndex) => rowIndex !== index));
@@ -77,6 +80,15 @@ const Table: React.FC = () => {
     alert('Item added successfully!')
   }
 
+  
+  const handleDeleteItems = (index: number) => {
+    const updatedItems = [...items];
+    updatedItems.splice(index, 1);
+    setItems(updatedItems);
+    alert('Item deleted successfully!')
+  };
+  
+
   // Calculate the range of items to display for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, items.length);
@@ -103,7 +115,7 @@ const Table: React.FC = () => {
         </div>
       </div>
       <div className="table-responsive container_table shadow-lg rounded mt-3 mb-3">
-        <table className="table table-bordered ">
+        <table className="table table-bordered " id='my-table'>
           <thead>
             {/* Table header */}
             <tr>
@@ -137,7 +149,7 @@ const Table: React.FC = () => {
               <td>
                 {editableRows.includes(index) ? (
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     value={item.actualQuantity}
                     onChange={(e) => handleEditValueChange(index, 'actualQuantity', e.target.value)}
@@ -149,7 +161,7 @@ const Table: React.FC = () => {
               <td>
                 {editableRows.includes(index) ? (
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     value={item.receivedQuantity}
                     onChange={(e) => handleEditValueChange(index, 'receivedQuantity', e.target.value)}
@@ -161,7 +173,7 @@ const Table: React.FC = () => {
               <td>
                 {editableRows.includes(index) ? (
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     value={item.remainingStock}
                     onChange={(e) => handleEditValueChange(index, 'remainingStock', e.target.value)}
@@ -184,14 +196,14 @@ const Table: React.FC = () => {
                 </td>
 
 
-                <td className="text-center"><button className='btn btn-danger px-3'>Delete<BsTrash className='ms-2' /></button></td>
+                <td className="text-center"><button className='btn btn-danger px-3' onClick={()=>handleDeleteItems(index)}>Delete<BsTrash className='ms-2' /></button></td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className=' d-md-flex justify-content-md-end'>
-        <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
+        <button className='btn ' id= "download-pdf" style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
       </div>
       {/* Pagination controls */}
       <div className="pagination">
@@ -225,7 +237,12 @@ const Table: React.FC = () => {
               <label htmlFor="receivedQuantity" className="form-label">Received Quantity (pcs)</label>
               <input type="number" className="form-control" id="receivedQuantity" name="receivedQuantity" value={newItem.receivedQuantity} onChange={handleInputChange} required />
               </div>
+              <div className="mb-3">
+              <label htmlFor="remainingStock" className="form-label">Remaining Stock (pcs)</label>
+              <input type="number" className="form-control" id="remainingStock" name="remainingStock" value={newItem.remainingStock} onChange={handleInputChange} required />
+              </div>
             </div>  
+
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>Close</button>
               <button type="submit" className="btn btn-primary" onClick={handleAddedItems}>Add Item</button>
@@ -238,3 +255,4 @@ const Table: React.FC = () => {
 };
 
 export default Table;
+
