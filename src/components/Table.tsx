@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; // Importing icons
 import { Modal } from 'react-bootstrap';
 // import { Link } from 'react-router-dom';
@@ -26,7 +26,7 @@ const Table: React.FC = () => {
   const [editableRows, setEditableRows] = useState<number[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<Item[]>([]);
   const [currentPage, setCurrentPage] = useState(1); // Current page number
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,13 +37,22 @@ const Table: React.FC = () => {
     setNewItem({ itemName: '', actualQuantity: 0, receivedQuantity: 0, remainingStock: 0 });
   };
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.toLowerCase()); // Search should be case-insensitive
+  };
+
+  useEffect(() => {
+    const filteredItems = items.filter(item =>
+      item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(filteredItems);
+  }, [searchTerm]);
   
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setNewItem((prevItem) => ({ ...prevItem, [name]: value }));
   };
   
-
   const toggleEditRow = (index: number) => {
     if (editableRows.includes(index)) {
       setEditableRows(editableRows.filter((rowIndex) => rowIndex !== index));
@@ -54,13 +63,7 @@ const Table: React.FC = () => {
     }
   };
 
-  const renderTableCell = (value: string | number, index: number, columnKey: keyof Item) => {
-    const item = items[index];
-    if (item.editing) {
-      return <input type="text" className="form-control" value={value} onChange={(e) => handleEditValueChange(index, columnKey, e.target.value)} />;
-    }
-    return value;
-  };
+  
 
   const handleEditValueChange = (index: number, columnKey: keyof Item, newValue: string | number) => {
     setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, [columnKey]: newValue } : item)));
@@ -102,7 +105,7 @@ const Table: React.FC = () => {
       <div className='mt-3'>
         <div className="input-group">
           <span className="input-group-text"><BsSearch /></span> 
-          <input type="text" className="form-control" style={{ maxWidth: '160px' }} placeholder="Search item" />
+          <input type="text" className="form-control" style={{ maxWidth: '160px' }} placeholder="Search item" onChange={handleSearch} />
           <button className='btn ms-2 rounded-2 ' style={{ backgroundColor: '#110f0f', color: 'white' }}>Search</button>
         </div>
         <div className='mt-3'>
@@ -127,7 +130,7 @@ const Table: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {items.slice(startIndex, endIndex).map((item, index) => (
+            {searchResults.slice(startIndex, endIndex).map((item, index) => (
               // Render table rows
               <tr key={index}>
                 {/* <td>{renderTableCell(item.itemName, index, 'itemName')}</td>
