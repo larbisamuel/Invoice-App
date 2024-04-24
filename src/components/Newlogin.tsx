@@ -41,7 +41,7 @@ const Newlogin: React.FC = () => {
                         className='form-control p-1 text-center' 
                         value={staffId} onChange={handleStaffIdChange} />
                         <span onClick={togglePasswordVisibility} 
-                        // style={{ cursor: 'pointer' }}
+                        
                         className='icon-container'
                         >
                             {showStaffId ? <BsEyeSlash /> : <BsEye />}
@@ -50,7 +50,10 @@ const Newlogin: React.FC = () => {
                     </div>
                    
                     <div className='d-grid mt-auto'>
-                        <button className='btn 'style={{backgroundColor: '#5CA7B7', color: 'white', fontFamily: 'times new roman', fontSize: "25px"}} onClick={handleSignIn}>Sign in</button>
+                        <button className='btn'
+                            style={{backgroundColor: '#5CA7B7', color: 'white', fontFamily: 'times new roman', fontSize: "25px"}} 
+                            onClick={handleSignIn}>Sign in
+                        </button>
                     </div>
                 </form>
             </div>
