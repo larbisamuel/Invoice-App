@@ -3,7 +3,6 @@ import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-ico
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
 
 interface Item {
   itemName: string;
@@ -30,7 +29,7 @@ const Table: React.FC = () => {
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('New item:', newItem); // For now, just log the data
+    console.log('New item:', newItem); 
     setItems([...items, newItem]);
     setShowAddItemModal(false);
     setNewItem({ itemName: '', actualQuantity: 0, receivedQuantity: 0, remainingStock: 0 });
