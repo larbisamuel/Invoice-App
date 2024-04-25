@@ -5,8 +5,7 @@ import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import invoice_logo from '../assets/invoice_logo.jpg'
 import { useNavigate } from 'react-router-dom';
 
-
-const Newlogin: React.FC = () => {
+const Login: React.FC = () => {
     const [showStaffId, setShowStaffId] = useState(false);
     const [staffId, setStaffId] = useState('');
 
@@ -31,7 +30,7 @@ const Newlogin: React.FC = () => {
                 <form>
                     <h3 className='text-center p-3 ' style={{fontFamily: 'times new roman'}}>Welcome Admin!</h3>
                     <div className='text-center mb-5' >
-                    <img src={invoice_logo} alt="company logo" className='logo' style={{ width: '100px', borderRadius: '50%' }}/>
+                    <img src={invoice_logo} alt="company logo" className='logo' style={{ width: '110px', borderRadius: '50%' }}/>
                     </div>
                     <h6 className='text-center p-4'style={{fontFamily: "inter", fontSize: "20px"}}>Enter your staff Id to login</h6>
                     <div className='mb-4'>
@@ -57,8 +56,10 @@ const Newlogin: React.FC = () => {
                     </div>
                 </form>
             </div>
+            
+            
         </div>
     );
 }
 
-export default Newlogin;
+export default Login;

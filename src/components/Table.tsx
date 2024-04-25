@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; // Importing icons
 import { Modal } from 'react-bootstrap';
+
 import { useNavigate } from 'react-router-dom';
+
+
 
 
 interface Item {
@@ -14,6 +17,7 @@ interface Item {
 
 const Table: React.FC = () => {
   const ITEMS_PER_PAGE = 5; // Number of items to display per page
+
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [newItem, setNewItem] = useState<Item>({
     itemName: '',
@@ -21,6 +25,7 @@ const Table: React.FC = () => {
     receivedQuantity: 0,
     remainingStock: 0,
   });
+  
   const [editableRows, setEditableRows] = useState<number[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,7 +54,7 @@ const Table: React.FC = () => {
     const { name, value } = event.target;
     setNewItem((prevItem) => ({ ...prevItem, [name]: value }));
   };
-
+  
   const toggleEditRow = (index: number) => {
     if (editableRows.includes(index)) {
       setEditableRows(editableRows.filter((rowIndex) => rowIndex !== index));
@@ -60,13 +65,7 @@ const Table: React.FC = () => {
     }
   };
 
-  const renderTableCell = (value: string | number, index: number, columnKey: keyof Item) => {
-    const item = items[index];
-    if (item.editing) {
-      return <input type="text" className="form-control" value={value} onChange={(e) => handleEditValueChange(index, columnKey, e.target.value)} />;
-    }
-    return value;
-  };
+  
 
   const handleEditValueChange = (index: number, columnKey: keyof Item, newValue: string | number) => {
     setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, [columnKey]: newValue } : item)));
@@ -102,6 +101,7 @@ const Table: React.FC = () => {
 
   return (
     <div className='mt-5 p-3 container shadow-lg'>
+      
       <div className=' d-md-flex justify-content-md-end'>
         <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={handleLogout}>Logout</button>
       </div>
@@ -120,10 +120,10 @@ const Table: React.FC = () => {
           </div>
         </div>
       </div>
-
       <div className="table-responsive container_table shadow-lg rounded mt-3 mb-3">
         <table className="table table-bordered " id='my-table'>
           <thead>
+            {/* Table header */}
             <tr>
               <th scope="col">ITEM NAME</th>
               <th scope="col">ACTUAL QTY(pcs)</th>
@@ -241,6 +241,7 @@ const Table: React.FC = () => {
               <input type="number" className="form-control" id="remainingStock" name="remainingStock" value={newItem.remainingStock} onChange={handleInputChange} required />
               </div>
             </div>  
+
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>Close</button>
               <button type="submit" className="btn btn-primary" onClick={handleAddedItems}>Add Item</button>
@@ -252,5 +253,5 @@ const Table: React.FC = () => {
   );
 };
 
-
 export default Table;
+
