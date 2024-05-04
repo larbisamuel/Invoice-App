@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; // Importing icons
 import { Modal } from 'react-bootstrap';
 
 import { useNavigate } from 'react-router-dom';
-
-
+import { Item } from './Item';
+import productApi from './productApi';
 
 
 interface Item {
@@ -14,30 +14,31 @@ interface Item {
   remainingStock: number;
   editing?: boolean;
 }
-
 const Table: React.FC = () => {
   const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
   const [showAddItemModal, setShowAddItemModal] = useState(false);
-  const [newItem, setNewItem] = useState<Item>({
-    itemName: '',
-    actualQuantity: 0,
-    receivedQuantity: 0,
-    remainingStock: 0,
-  });
-  
-  const [editableRows, setEditableRows] = useState<number[]>([]);
+
+  const [newItem, setNewItem] = useState<Item>(new Item);
+  const [editableRows, setEditableRows] = useState<string[]>([]);
   const [items, setItems] = useState<Item[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<Item[]>([]);
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [searchResults, setSearchResults] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1); // Current page number
+  // const [loading, setLoading] = useState(false);
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('New item:', newItem); 
-    setItems([...items, newItem]);
-    setShowAddItemModal(false);
-    setNewItem({ itemName: '', actualQuantity: 0, receivedQuantity: 0, remainingStock: 0 });
+
+    console.log('New item:', newItem);
+
+    productApi.createProduct(newItem).then((data)=>{
+      console.log(data);
+      setItems([...items, data]);
+      setShowAddItemModal(false);
+    })
+  setNewItem(new Item);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,8 +47,9 @@ const Table: React.FC = () => {
 
 
   const filteredItems = items.filter((item) =>
-    item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,24 +57,45 @@ const Table: React.FC = () => {
     setNewItem((prevItem) => ({ ...prevItem, [name]: value }));
   };
   
-  const toggleEditRow = (index: number) => {
+  const toggleEditRow = (index: string) => {
+
     if (editableRows.includes(index)) {
       setEditableRows(editableRows.filter((rowIndex) => rowIndex !== index));
-      setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, editing: false } : item)));
+      setItems((prevItems) => prevItems.map((item) => {
+        if(item.product_id === index){
+          productApi.updateProduct(item)
+          return { ...item, editing: false }
+        }
+        else{
+          return item
+        }
+      }));
     } else {
       setEditableRows([...editableRows, index]);
-      setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, editing: true } : item)));
+      setItems((prevItems) => prevItems.map((item) => (item.product_id === index ? { ...item, editing: true } : item)));
     }
   };
 
-  
 
-  const handleEditValueChange = (index: number, columnKey: keyof Item, newValue: string | number) => {
-    setItems((prevItems) => prevItems.map((item, i) => (i === index ? { ...item, [columnKey]: newValue } : item)));
+  // const renderTableCell = (value: string | number, index: number, columnKey: keyof Item) => {
+  //   const item = items[index];
+  //   if (item.editing) {
+  //     return <input type="text" className="form-control" value={value} onChange={(e) => handleEditValueChange(index, columnKey, e.target.value)} />;
+  //   }
+  //   return value;
+  // };
+
+
+  const handleEditValueChange = (index: string, columnKey: keyof Item, newValue: string | number) => {
+    setItems((prevItems) => prevItems.map((item) => (item.product_id === index ? { ...item, [columnKey]: newValue } : item)));
   };
 
   const handleDownload = ()=> {
     
+  }
+
+  const handleDelete = (product_id: string) => {
+    productApi.deleteProduct(product_id);
   }
   const navigate = useNavigate();
 
@@ -97,6 +120,16 @@ const Table: React.FC = () => {
   // Calculate the range of items to display for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, items.length);
+
+  useEffect ( () => {
+    // setLoading(true);
+
+    productApi.getAllProduct().then((data)=>{
+      console.log(data);
+      setItems(data)
+    })
+    console.log("kojo")
+  },[])
 
 
   return (
@@ -133,53 +166,58 @@ const Table: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-          
-          {filteredItems.slice(startIndex, endIndex).map((item, index)=> (
-              <tr key={index}>
-                
+
+            {items.slice(startIndex, endIndex).map((item) => (
+              // Render table rows
+              <tr key={item.product_id}>
+                {/* <td>{renderTableCell(item.productName, index, 'productName')}</td>
+                <td>{renderTableCell(item.actualQuantity, index, 'actualQuantity')}</td>
+                <td>{renderTableCell(item.receivedQuantity, index, 'receivedQuantity')}</td>
+                <td>{renderTableCell(item.remainingStock, index, 'remainingStock')}</td> */}
+
                 <td>
-                {editableRows.includes(index) ? (
+                {editableRows.includes(item.product_id) ? (
                   <input
                     type="text"
                     className="form-control"
-                    value={item.itemName}
-                    onChange={(e) => handleEditValueChange(index, 'itemName', e.target.value)}
+                    value={item.productName}
+                    onChange={(e) => handleEditValueChange(item.product_id, 'productName', e.target.value)}
                   />
                 ) : (
-                  item.itemName
+                  item.productName
                 )}
               </td>
               <td>
-                {editableRows.includes(index) ? (
+                {editableRows.includes(item.product_id) ? (
                   <input
                     type="number"
                     className="form-control"
                     value={item.actualQuantity}
-                    onChange={(e) => handleEditValueChange(index, 'actualQuantity', e.target.value)}
+                    onChange={(e) => handleEditValueChange(item.product_id, 'actualQuantity', e.target.value)}
                   />
                 ) : (
                   item.actualQuantity
                 )}
               </td>
               <td>
-                {editableRows.includes(index) ? (
+                {editableRows.includes(item.product_id) ? (
                   <input
                     type="number"
                     className="form-control"
                     value={item.receivedQuantity}
-                    onChange={(e) => handleEditValueChange(index, 'receivedQuantity', e.target.value)}
+                    onChange={(e) => handleEditValueChange(item.product_id, 'receivedQuantity', e.target.value)}
                   />
                 ) : (
                   item.receivedQuantity
                 )}
               </td>
               <td>
-                {editableRows.includes(index) ? (
+                {editableRows.includes(item.product_id) ? (
                   <input
                     type="number"
                     className="form-control"
                     value={item.remainingStock}
-                    onChange={(e) => handleEditValueChange(index, 'remainingStock', e.target.value)}
+                    onChange={(e) => handleEditValueChange(item.product_id, 'remainingStock', e.target.value)}
                   />
                 ) : (
                   item.remainingStock
@@ -187,14 +225,16 @@ const Table: React.FC = () => {
               </td>
                 
                 <td className="text-center">
-                    <button className='btn px-3' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={() => toggleEditRow(index)}>
-                    {editableRows.includes(index) ? 'Save' : 'Edit'}
+                    <button className='btn px-3' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={() => toggleEditRow(item.product_id)}>
+                    {editableRows.includes(item.product_id) ? 'Save' : 'Edit'}
                         <BsPencilSquare className='ms-2' />
                         </button>
                 </td>
 
 
-                <td className="text-center"><button className='btn btn-danger px-3'onClick={()=>handleDeleteItems(index)}>Delete<BsTrash className='ms-2' /></button></td>
+
+                <td className="text-center"><button className='btn btn-danger px-3'onClick={() => handleDelete(item.product_id)}>Delete<BsTrash className='ms-2' /></button></td>
+
               </tr>
             ))}
           </tbody>
@@ -226,8 +266,10 @@ const Table: React.FC = () => {
         <Modal.Body>
           <form onSubmit={handleAddItem}>
             <div className="mb-3">
-              <label htmlFor="itemName" className="form-label">Item Name</label>
-              <input type="text" className="form-control" id="itemName" name="itemName" autoFocus value={newItem.itemName} onChange={handleInputChange} required />
+
+              <label htmlFor="productName" className="form-label">Item Name</label>
+              <input type="text" className="form-control" id="productName" name="productName" value={newItem.productName} onChange={handleInputChange} required />
+
             </div>
             <div className="mb-3">
               <label htmlFor="actualQuantity" className="form-label">Actual Quantity (pcs)</label>
