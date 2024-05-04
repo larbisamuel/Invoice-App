@@ -1,9 +1,3 @@
-/* .form_container{
-  width: 30%;
-  height: 60%
-  
-} */
-
 @media screen and (max-width:1000px) {
   .form_container{
     width: 45%;

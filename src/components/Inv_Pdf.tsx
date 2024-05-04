@@ -28,11 +28,17 @@ const Inv_Pdf: React.FC = () => {
         <div>
         <div className='mt-5 p-3' style={{fontFamily:"inter"}}>
             <h4>P.O. Box 164, Ablekuma,</h4>
+            <div className='float-end' >
+                <h3  style={{fontFamily: 'inter', fontWeight: 'bold'}}>Inovice number: 1</h3>
+                <h4  style={{fontFamily: 'inter', fontWeight: 'bold'}}>2024-03-06</h4>
+                <h5  style={{fontFamily: 'inter', fontWeight: 'bold'}}>12:00 GMT</h5>
+            </div>
             <h4>Accra-Ghana</h4>
             <h4>+233 248791002</h4>
+            
         </div>
 
-        <div className='p-3'style={{fontFamily:"inter"}}>
+        <div className='p-3 'style={{fontFamily:"inter"}} >
             <h5>Behind Melcom Ghana</h5>
         </div> 
         </div>
