@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; // Importing icons
 import { Modal } from 'react-bootstrap';
-// import { Link } from 'react-router-dom';
+
 import { useNavigate } from 'react-router-dom';
 import { Item } from './Item';
 import productApi from './productApi';
 
 
-
-
+interface Item {
+  itemName: string;
+  actualQuantity: number;
+  receivedQuantity: number;
+  remainingStock: number;
+  editing?: boolean;
+}
 const Table: React.FC = () => {
   const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
   const [showAddItemModal, setShowAddItemModal] = useState(false);
+
   const [newItem, setNewItem] = useState<Item>(new Item);
   const [editableRows, setEditableRows] = useState<string[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   // const [searchTerm, setSearchTerm] = useState('');
   // const [searchResults, setSearchResults] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1); // Current page number
   // const [loading, setLoading] = useState(false);
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     console.log('New item:', newItem);
 
     productApi.createProduct(newItem).then((data)=>{
@@ -31,13 +39,26 @@ const Table: React.FC = () => {
       setShowAddItemModal(false);
     })
   setNewItem(new Item);
-  }
-  
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.toLowerCase()); // Search should be case-insensitive
+  };
+
+
+  const filteredItems = items.filter((item) =>
+    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setNewItem((prevItem) => ({ ...prevItem, [name]: value }));
   };
+  
   const toggleEditRow = (index: string) => {
+
     if (editableRows.includes(index)) {
       setEditableRows(editableRows.filter((rowIndex) => rowIndex !== index));
       setItems((prevItems) => prevItems.map((item) => {
@@ -55,6 +76,7 @@ const Table: React.FC = () => {
     }
   };
 
+
   // const renderTableCell = (value: string | number, index: number, columnKey: keyof Item) => {
   //   const item = items[index];
   //   if (item.editing) {
@@ -62,6 +84,7 @@ const Table: React.FC = () => {
   //   }
   //   return value;
   // };
+
 
   const handleEditValueChange = (index: string, columnKey: keyof Item, newValue: string | number) => {
     setItems((prevItems) => prevItems.map((item) => (item.product_id === index ? { ...item, [columnKey]: newValue } : item)));
@@ -88,6 +111,15 @@ const Table: React.FC = () => {
     alert('Item added successfully!')
   }
 
+  
+  const handleDeleteItems = (index: number) => {
+    const updatedItems = [...items];
+    updatedItems.splice(index, 1);
+    setItems(updatedItems);
+    alert('Item deleted successfully!')
+  };
+  
+
   // Calculate the range of items to display for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, items.length);
@@ -102,6 +134,7 @@ const Table: React.FC = () => {
     console.log("kojo")
   },[])
 
+
   return (
     <div className='mt-5 p-3 container shadow-lg'>
       
@@ -110,8 +143,8 @@ const Table: React.FC = () => {
       </div>
       <div className='mt-3'>
         <div className="input-group">
-          <span className="input-group-text"><BsSearch /></span> 
-          <input type="text" className="form-control" style={{ maxWidth: '160px' }} placeholder="Search item" />
+          <span className="input-group-text"><BsSearch /></span> {/* Search icon */}
+          <input type="text" className="form-control" style={{ maxWidth: '160px' }} placeholder="Search item" onChange={handleSearch} />
           <button className='btn ms-2 rounded-2 ' style={{ backgroundColor: '#110f0f', color: 'white' }}>Search</button>
         </div>
         <div className='mt-3'>
@@ -124,7 +157,7 @@ const Table: React.FC = () => {
         </div>
       </div>
       <div className="table-responsive container_table shadow-lg rounded mt-3 mb-3">
-        <table className="table table-bordered ">
+        <table className="table table-bordered " id='my-table'>
           <thead>
             {/* Table header */}
             <tr>
@@ -136,6 +169,7 @@ const Table: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+
             {items.slice(startIndex, endIndex).map((item) => (
               // Render table rows
               <tr key={item.product_id}>
@@ -143,6 +177,7 @@ const Table: React.FC = () => {
                 <td>{renderTableCell(item.actualQuantity, index, 'actualQuantity')}</td>
                 <td>{renderTableCell(item.receivedQuantity, index, 'receivedQuantity')}</td>
                 <td>{renderTableCell(item.remainingStock, index, 'remainingStock')}</td> */}
+
                 <td>
                 {editableRows.includes(item.product_id) ? (
                   <input
@@ -158,7 +193,7 @@ const Table: React.FC = () => {
               <td>
                 {editableRows.includes(item.product_id) ? (
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     value={item.actualQuantity}
                     onChange={(e) => handleEditValueChange(item.product_id, 'actualQuantity', e.target.value)}
@@ -170,7 +205,7 @@ const Table: React.FC = () => {
               <td>
                 {editableRows.includes(item.product_id) ? (
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     value={item.receivedQuantity}
                     onChange={(e) => handleEditValueChange(item.product_id, 'receivedQuantity', e.target.value)}
@@ -182,7 +217,7 @@ const Table: React.FC = () => {
               <td>
                 {editableRows.includes(item.product_id) ? (
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     value={item.remainingStock}
                     onChange={(e) => handleEditValueChange(item.product_id, 'remainingStock', e.target.value)}
@@ -191,12 +226,7 @@ const Table: React.FC = () => {
                   item.remainingStock
                 )}
               </td>
-                {/* <td className="text-center">
-                  <button className='btn px-3' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={() => toggleEditRow(index)}>
-                    {editableRows.includes(index) ? 'Save' : 'Edit'}
-                    <BsPencilSquare className='ms-2' />
-                  </button>
-                </td> */}
+                
                 <td className="text-center">
                     <button className='btn px-3' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={() => toggleEditRow(item.product_id)}>
                     {editableRows.includes(item.product_id) ? 'Save' : 'Edit'}
@@ -205,17 +235,20 @@ const Table: React.FC = () => {
                 </td>
 
 
+
                 <td className="text-center"><button className='btn btn-danger px-3'onClick={() => handleDelete(item.product_id)}>Delete<BsTrash className='ms-2' /></button></td>
+
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className=' d-md-flex justify-content-md-end'>
-        <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
+        <button className='btn ' id="download-pdf" style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
       </div>
-      {/* Pagination controls */}
-      <div className="pagination">
+
+       {/* Pagination controls */}
+       <div className="pagination">
         <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
           Prev
         </button>
@@ -236,8 +269,10 @@ const Table: React.FC = () => {
         <Modal.Body>
           <form onSubmit={handleAddItem}>
             <div className="mb-3">
+
               <label htmlFor="productName" className="form-label">Item Name</label>
               <input type="text" className="form-control" id="productName" name="productName" value={newItem.productName} onChange={handleInputChange} required />
+
             </div>
             <div className="mb-3">
               <label htmlFor="actualQuantity" className="form-label">Actual Quantity (pcs)</label>
@@ -246,7 +281,12 @@ const Table: React.FC = () => {
               <label htmlFor="receivedQuantity" className="form-label">Received Quantity (pcs)</label>
               <input type="number" className="form-control" id="receivedQuantity" name="receivedQuantity" value={newItem.receivedQuantity} onChange={handleInputChange} required />
               </div>
+              <div className="mb-3">
+              <label htmlFor="remainingStock" className="form-label">Remaining Stock (pcs)</label>
+              <input type="number" className="form-control" id="remainingStock" name="remainingStock" value={newItem.remainingStock} onChange={handleInputChange} required />
+              </div>
             </div>  
+
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>Close</button>
               <button type="submit" className="btn btn-primary" onClick={handleAddedItems}>Add Item</button>
@@ -259,3 +299,4 @@ const Table: React.FC = () => {
 };
 
 export default Table;
+
