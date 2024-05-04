@@ -7,13 +7,13 @@ import { Item } from './Item';
 import productApi from './productApi';
 
 
-interface Item {
-  itemName: string;
-  actualQuantity: number;
-  receivedQuantity: number;
-  remainingStock: number;
-  editing?: boolean;
-}
+// interface Item {
+//   itemName: string;
+//   actualQuantity: number;
+//   receivedQuantity: number;
+//   remainingStock: number;
+//   editing?: boolean;
+// }
 const Table: React.FC = () => {
   const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
@@ -22,7 +22,7 @@ const Table: React.FC = () => {
   const [newItem, setNewItem] = useState<Item>(new Item);
   const [editableRows, setEditableRows] = useState<string[]>([]);
   const [items, setItems] = useState<Item[]>([]);
-  // const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   // const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1); // Current page number
