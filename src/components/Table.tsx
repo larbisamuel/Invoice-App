@@ -7,13 +7,13 @@ import { Item } from './Item';
 import productApi from './productApi';
 
 
-interface Item {
-  itemName: string;
-  actualQuantity: number;
-  receivedQuantity: number;
-  remainingStock: number;
-  editing?: boolean;
-}
+// interface Item {
+//   itemName: string;
+//   actualQuantity: number;
+//   receivedQuantity: number;
+//   remainingStock: number;
+//   editing?: boolean;
+// }
 const Table: React.FC = () => {
   const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
@@ -22,8 +22,8 @@ const Table: React.FC = () => {
   const [newItem, setNewItem] = useState<Item>(new Item);
   const [editableRows, setEditableRows] = useState<string[]>([]);
   const [items, setItems] = useState<Item[]>([]);
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const [searchResults, setSearchResults] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1); // Current page number
   // const [loading, setLoading] = useState(false);
@@ -98,6 +98,8 @@ const Table: React.FC = () => {
     productApi.deleteProduct(product_id).then(() => {
       const updateditems = items.filter(item => item.product_id !== product_id);
       setItems(updateditems);
+    }).then(() => {
+      alert('Item deleted successfully!')
     });
   }
   const navigate = useNavigate();
@@ -112,13 +114,7 @@ const Table: React.FC = () => {
   }
 
   
-  const handleDeleteItems = (index: number) => {
-    const updatedItems = [...items];
-    updatedItems.splice(index, 1);
-    setItems(updatedItems);
-    alert('Item deleted successfully!')
-  };
-  
+
 
   // Calculate the range of items to display for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
