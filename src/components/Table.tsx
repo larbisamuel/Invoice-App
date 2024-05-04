@@ -72,7 +72,10 @@ const Table: React.FC = () => {
   }
 
   const handleDelete = (product_id: string) => {
-    productApi.deleteProduct(product_id);
+    productApi.deleteProduct(product_id).then(() => {
+      const updateditems = items.filter(item => item.product_id !== product_id);
+      setItems(updateditems);
+    });
   }
   const navigate = useNavigate();
 
