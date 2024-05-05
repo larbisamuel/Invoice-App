@@ -4,13 +4,17 @@ import './Newlogin.css';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import invoice_logo from '../assets/invoice_logo.jpg'
 import { useNavigate } from 'react-router-dom';
+import userApi, {staffInfo} from './userApi';
 
 const Login: React.FC = () => {
     const [showStaffId, setShowStaffId] = useState(false);
-    const [staffId, setStaffId] = useState('');
+    const [staffId, setStaffId] = useState<staffInfo>({'staff_id': ""});
+    const [isLogged, setIsLogged] = useState<boolean>(false)
 
     const handleStaffIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStaffId(event.target.value);
+        setStaffId({ ...staffId, [event.target.name]: event.target.value});
+
+        console.log(staffId)
     }
 
     const togglePasswordVisibility = ()=> {
@@ -19,10 +23,28 @@ const Login: React.FC = () => {
     
     const navigate = useNavigate();
 
-    const handleSignIn = () => {
-        navigate('/Table');
-        alert('Login successful!')
-    } 
+    const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log(staffId);
+
+        userApi.loginUser(staffId).then((res) => {
+            console.log(res);
+            localStorage.setItem('token', res.token)
+            setIsLogged(true)
+            console.log(isLogged)
+            navigate('/Table')
+
+            if(res.token){
+                navigate('/Table')
+        }else{
+            alert("login unsuccessfull")
+        }}
+        )
+
+        
+
+    }
+ 
 
     return (
         <div className='login template d-flex justify-content-center align-items-center vh-100'>
@@ -38,7 +60,8 @@ const Login: React.FC = () => {
                         <input type={showStaffId ? 'text' : 'password'} 
                         placeholder='enter staff id' 
                         className='form-control p-1 text-center' 
-                        value={staffId} onChange={handleStaffIdChange} />
+                        name='staff_id'
+                        value={staffId.staff_id} onChange={handleStaffIdChange} />
                         <span onClick={togglePasswordVisibility} 
                         
                         className='icon-container'

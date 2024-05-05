@@ -4,6 +4,7 @@ import { Item } from "./Item";
 
 const  baseUrl = "http://localhost:3000";
 const  productUrl =  `${baseUrl}/api/product`;
+const token = localStorage.getItem('token');
 
 function translateStatuseTOErrorMessage(status: number) {
   switch (status) {
@@ -18,7 +19,13 @@ function translateStatuseTOErrorMessage(status: number) {
 const productApi =  {
 
   async getAllProduct(): Promise<Item[]> {  
-    return await fetch(productUrl).then(async (response) => {
+    return await fetch(productUrl, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }).then(async (response) => {
       if (response.ok) {
         const jsonResponse = await response.json()
         console.log(jsonResponse)
@@ -43,7 +50,8 @@ const productApi =  {
       return await fetch(productUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(product)      
     }).then(async (response) => {
@@ -70,7 +78,8 @@ const productApi =  {
       return await fetch(`${productUrl}/product/${product.product_id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(product)      
     }).then(async (response) => {
@@ -96,7 +105,8 @@ const productApi =  {
       return await fetch(`${productUrl}/product/${product_id}`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }     
     }).then(async (response) => {
       if (response.ok) {
