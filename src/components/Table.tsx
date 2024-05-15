@@ -227,7 +227,7 @@ const Table: React.FC = () => {
           <form onSubmit={handleAddItem}>
             <div className="mb-3">
               <label htmlFor="itemName" className="form-label">Item Name</label>
-              <input type="text" className="form-control" id="itemName" name="itemName" value={newItem.itemName} onChange={handleInputChange} required />
+              <input type="text" className="form-control" id="itemName" name="itemName" value={newItem.itemName} autoFocus onChange={handleInputChange} required />
             </div>
             <div className="mb-3">
               <label htmlFor="actualQuantity" className="form-label">Actual Quantity (pcs)</label>
