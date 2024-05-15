@@ -171,7 +171,7 @@ const Table: React.FC = () => {
           </thead>
           <tbody>
 
-            {items.slice(startIndex, endIndex).map((item) => (
+            {filteredItems.slice(startIndex, endIndex).map((item) => (
               // Render table rows
               <tr key={item.product_id}>
                 {/* <td>{renderTableCell(item.productName, index, 'productName')}</td>
@@ -272,7 +272,7 @@ const Table: React.FC = () => {
             <div className="mb-3">
 
               <label htmlFor="productName" className="form-label">Item Name</label>
-              <input type="text" className="form-control" id="productName" name="productName" value={newItem.productName} onChange={handleInputChange} required />
+              <input type="text" className="form-control" id="productName" name="productName" value={newItem.productName} autoFocus onChange={handleInputChange} required />
 
             </div>
             <div className="mb-3">
