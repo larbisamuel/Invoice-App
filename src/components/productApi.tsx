@@ -37,8 +37,6 @@ const productApi =  {
           statusText: response.statusText,
           url: response.url,
         };
-        console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
-
         const errorMessage = translateStatuseTOErrorMessage(httpErrorInfo.status)
         throw new Error(errorMessage);
       }

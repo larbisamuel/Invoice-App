@@ -1,55 +1,60 @@
 
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import './Newlogin.css';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import invoice_logo from '../assets/invoice_logo.jpg'
 import { useNavigate } from 'react-router-dom';
-import userApi, {staffInfo} from './userApi';
+import {staffInfo} from './userApi';
 
 const Login: React.FC = () => {
     const [showStaffId, setShowStaffId] = useState(false);
     const [staffId, setStaffId] = useState<staffInfo>({'staff_id': ""});
-    const [isLogged, setIsLogged] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(false)
+
+    const navigate = useNavigate();
 
     const handleStaffIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setStaffId({ ...staffId, [event.target.name]: event.target.value});
-
         console.log(staffId)
     }
 
     const togglePasswordVisibility = ()=> {
         setShowStaffId(!showStaffId);
     }
-    
-    const navigate = useNavigate();
+
 
     const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+
         event.preventDefault();
         console.log(staffId);
-
-        userApi.loginUser(staffId).then((res) => {
-            console.log(res);
-            localStorage.setItem('token', res.token)
-            setIsLogged(true)
-            console.log(isLogged)
-            navigate('/Table')
-
-            if(res.token){
-                navigate('/Table')
-        }else{
-            alert("login unsuccessfull")
-        }}
-        )
-
+        setLoading(true);
         
-
-    }
- 
+      
+            await fetch( "http://localhost:3000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(staffId)
+            }).then(async (response) => {
+                setLoading(false); 
+                if (response.ok) {
+                    const jsonResponse =await  response.json();
+                    localStorage.setItem('token', jsonResponse.token)
+                    navigate("/Table");
+                    
+                }
+                else{
+                    alert("Unsuccesful");
+                }
+            })
+        
+        }
 
     return (
         <div className='login template d-flex justify-content-center align-items-center vh-100'>
             <div className='form_container p-3 rounded-4 bg-white shadow-lg'style={{ minHeight: '500px', width: '500px',backgroundColor: "#fffcfa"  }}>
-                <form>
+                <form onSubmit={handleSignIn}>
                     <h3 className='text-center p-3 ' style={{fontFamily: 'times new roman'}}>Welcome Admin!</h3>
                     <div className='text-center mb-5' >
                     <img src={invoice_logo} alt="company logo" className='logo' style={{ width: '110px', borderRadius: '50%' }}/>
@@ -70,11 +75,11 @@ const Login: React.FC = () => {
                         </span>
                         </div>   
                     </div>
-                   
+                    {isLoading && <div>Loading</div>}  
                     <div className='d-grid mt-auto'>
-                        <button className='btn'
+                        <button  type="submit"
                             style={{backgroundColor: '#5CA7B7', color: 'white', fontFamily: 'times new roman', fontSize: "25px"}} 
-                            onClick={handleSignIn}>Sign in
+                            >Sign in
                         </button>
                     </div>
                 </form>

@@ -24,6 +24,7 @@ const Table: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1); // Current page number
   // const [loading, setLoading] = useState(false);
@@ -119,21 +120,25 @@ const Table: React.FC = () => {
   // Calculate the range of items to display for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, items.length);
+  const token = localStorage.getItem("token")
+  useEffect (() => {
 
-  useEffect ( () => {
-    // setLoading(true);
+    if (!token) navigate('/');
+    setIsLoading(true);
+    (async () => {
 
-    productApi.getAllProduct().then((data)=>{
-      console.log(data);
-      setItems(data)
-    })
-    console.log("kojo")
+      const data = await productApi.getAllProduct()
+      setIsLoading(false);
+      setItems(data);
+
+    })()
+   
   },[])
 
 
   return (
     <div className='mt-5 p-3 container shadow-lg'>
-      
+      {isLoading && <h1>LOADING ---</h1>}
       <div className=' d-md-flex justify-content-md-end'>
         <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={handleLogout}>Logout</button>
       </div>

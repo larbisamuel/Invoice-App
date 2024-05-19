@@ -31,8 +31,8 @@ const userApi = {
             body: JSON.stringify(user_id)
         }).then(async (response) => {
             if (response.ok) {
-                const jsonResponse = await response.json()
-                console.log(jsonResponse)
+                const jsonResponse = await response.json();
+                localStorage.setItem('token', jsonResponse.token);
                 return {
                     'data': jsonResponse.data, 
                     'token': jsonResponse.token
