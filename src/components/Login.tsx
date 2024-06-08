@@ -36,17 +36,19 @@ const Login: React.FC = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(staffId)
-            }).then(async (response) => {
-                setLoading(false); 
+            }).then(async (response) => { 
                 if (response.ok) {
-                    const jsonResponse =await  response.json();
+                    const jsonResponse = await  response.json();
+                    setLoading(false);
                     localStorage.setItem('token', jsonResponse.token)
                     navigate("/Table");
                     
                 }
                 else{
+                    setLoading(false);
                     alert("Unsuccesful");
                 }
+                
             })
         
         }

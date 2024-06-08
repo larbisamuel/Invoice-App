@@ -8,6 +8,8 @@ import Table from './components/Table';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 const App: React.FC = () => {
+
+
   return (
     <BrowserRouter>
      <Routes>

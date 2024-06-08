@@ -18,12 +18,12 @@ function translateStatuseTOErrorMessage(status: number) {
 }
 const productApi =  {
 
-  async getAllProduct(): Promise<Item[]> {  
+  async getAllProduct(tk: string|null): Promise<Item[]> {  
     return await fetch(productUrl, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${tk}`
         },
     }).then(async (response) => {
       if (response.ok) {
