@@ -7,6 +7,7 @@ import { Item } from './Item';
 import productApi from './productApi';
 
 
+
 // interface Item {
 //   itemName: string;
 //   actualQuantity: number;
@@ -23,11 +24,11 @@ const Table: React.FC = () => {
   const [editableRows, setEditableRows] = useState<string[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1); // Current page number
-  // const [loading, setLoading] = useState(false);
+  // const [token, setToken] = useState(false);
 
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -120,16 +121,20 @@ const Table: React.FC = () => {
   // Calculate the range of items to display for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, items.length);
-  const token = localStorage.getItem("token")
   useEffect (() => {
-
-    if (!token) navigate('/');
+    const tk = localStorage.getItem("token")
+    if (!tk) navigate('/');
     setIsLoading(true);
     (async () => {
-
-      const data = await productApi.getAllProduct()
+      try{
+      const data = await productApi.getAllProduct(tk)
       setIsLoading(false);
       setItems(data);
+      }
+      catch(e){
+          console.log(`The Error ${e}`)
+          navigate('/');
+      }
 
     })()
    
