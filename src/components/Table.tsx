@@ -1,10 +1,11 @@
  import React, { useEffect, useState } from 'react';
-import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; // Importing icons
+import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; 
 import { Modal } from 'react-bootstrap';
 
 import { useNavigate } from 'react-router-dom';
 import { Item } from './Item';
 import productApi from './productApi';
+
 
 
 
@@ -92,17 +93,21 @@ const Table: React.FC = () => {
     setItems((prevItems) => prevItems.map((item) => (item.product_id === index ? { ...item, [columnKey]: newValue } : item)));
   };
 
-  const handleDownload = ()=> {
+  // const handleDownload = ()=> {
     
-  }
+  // }
 
   const handleDelete = (product_id: string) => {
+    const confirmed = window.confirm('Are you sure you want to delete this item?');
+
+    if(confirmed){
     productApi.deleteProduct(product_id).then(() => {
       const updateditems = items.filter(item => item.product_id !== product_id);
       setItems(updateditems);
     }).then(() => {
       alert('Item deleted successfully!')
     });
+  }
   }
   const navigate = useNavigate();
 
@@ -143,7 +148,10 @@ const Table: React.FC = () => {
 
   return (
     <div className='mt-5 p-3 container shadow-lg'>
-      {isLoading && <h1>LOADING ---</h1>}
+      {/* {isLoading && <h1>LOADING ---</h1>} */}
+      {isLoading && <div className="spinner-grow" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>}
       <div className=' d-md-flex justify-content-md-end'>
         <button className='btn ' style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={handleLogout}>Logout</button>
       </div>
@@ -249,9 +257,9 @@ const Table: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <div className=' d-md-flex justify-content-md-end'>
+      {/* <div className=' d-md-flex justify-content-md-end'>
         <button className='btn ' id="download-pdf" style={{ backgroundColor: '#5CA7B7', color: 'white' }} onClick={ handleDownload}>Download <BsDownload /></button>
-      </div>
+      </div> */}
 
        {/* Pagination controls */}
        <div className="pagination">
