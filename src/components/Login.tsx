@@ -75,7 +75,11 @@ const Login: React.FC = () => {
                         </span>
                         </div>   
                     </div>
-                    {isLoading && <div>Loading</div>}  
+                    {isLoading && <div className="d-flex justify-content-center">
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                                </div>}
                     <div className='d-grid mt-auto'>
                         <button  type="submit"
                             style={{backgroundColor: '#5CA7B7', color: 'white', fontFamily: 'times new roman', fontSize: "25px"}} 
