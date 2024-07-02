@@ -15,7 +15,7 @@ const Login: React.FC = () => {
 
     const handleStaffIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setStaffId({ ...staffId, [event.target.name]: event.target.value});
-        console.log(staffId)
+        // console.log(staffId)
     }
 
     const togglePasswordVisibility = ()=> {
@@ -26,11 +26,11 @@ const Login: React.FC = () => {
     const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
 
         event.preventDefault();
-        console.log(staffId);
+        // console.log(staffId);
         setLoading(true);
         
       
-            await fetch( "http://localhost:3000/api/auth/login", {
+            await fetch( "https://invoice-api-4a9x.onrender.com/api/auth/login", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'

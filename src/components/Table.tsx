@@ -1,5 +1,5 @@
  import React, { useEffect, useState } from 'react';
-import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; 
+import { BsSearch, BsPlus, BsTrash, BsPencilSquare } from 'react-icons/bs'; 
 import { Modal } from 'react-bootstrap';
 
 import { useNavigate } from 'react-router-dom';
@@ -34,10 +34,10 @@ const Table: React.FC = () => {
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log('New item:', newItem);
+    // console.log('New item:', newItem);
 
     productApi.createProduct(newItem).then((data)=>{
-      console.log(data);
+      // console.log(data);
       setItems([...items, data]);
       setShowAddItemModal(false);
     })
@@ -137,7 +137,7 @@ const Table: React.FC = () => {
       setItems(data);
       }
       catch(e){
-          console.log(`The Error ${e}`)
+          // console.log(`The Error ${e}`)
           navigate('/');
       }
 
