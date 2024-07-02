@@ -17,7 +17,7 @@ import productApi from './productApi';
 //   editing?: boolean;
 // }
 const Table: React.FC = () => {
-  const ITEMS_PER_PAGE = 5; // Number of items to display per page
+  const ITEMS_PER_PAGE = 10; // Number of items to display per page
 
   const [showAddItemModal, setShowAddItemModal] = useState(false);
 
