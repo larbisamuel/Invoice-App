@@ -1,5 +1,5 @@
  import React, { useEffect, useState } from 'react';
-import { BsSearch, BsPlus, BsDownload, BsTrash, BsPencilSquare } from 'react-icons/bs'; 
+import { BsSearch, BsPlus, BsTrash, BsPencilSquare } from 'react-icons/bs'; 
 import { Modal } from 'react-bootstrap';
 
 import { useNavigate } from 'react-router-dom';
