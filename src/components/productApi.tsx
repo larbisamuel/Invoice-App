@@ -2,7 +2,7 @@ import { Item } from "./Item";
 
 
 
-const  baseUrl = "http://localhost:3000";
+const  baseUrl = "https://invoice-api-4a9x.onrender.com";
 const  productUrl =  `${baseUrl}/api/product`;
 const token = localStorage.getItem('token');
 
@@ -28,7 +28,7 @@ const productApi =  {
     }).then(async (response) => {
       if (response.ok) {
         const jsonResponse = await response.json()
-        console.log(jsonResponse)
+        // console.log(jsonResponse)
        return jsonResponse.data 
       }
       else{
@@ -55,7 +55,7 @@ const productApi =  {
     }).then(async (response) => {
       if (response.ok) {
         const jsonResponse = await response.json()
-        console.log(jsonResponse)
+        // console.log(jsonResponse)
        return jsonResponse.data 
       }
       else{
@@ -64,7 +64,7 @@ const productApi =  {
           statusText: response.statusText,
           url: response.url,
         };
-        console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
+        // console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
 
         const errorMessage = translateStatuseTOErrorMessage(httpErrorInfo.status)
         throw new Error(errorMessage);
@@ -83,7 +83,7 @@ const productApi =  {
     }).then(async (response) => {
       if (response.ok) {
         const jsonResponse = await response.json()
-        console.log(jsonResponse)
+        // console.log(jsonResponse)
        return jsonResponse.data 
       }
       else{
@@ -92,7 +92,7 @@ const productApi =  {
           statusText: response.statusText,
           url: response.url,
         };
-        console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
+        // console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
 
         const errorMessage = translateStatuseTOErrorMessage(httpErrorInfo.status)
         throw new Error(errorMessage);
@@ -109,7 +109,7 @@ const productApi =  {
     }).then(async (response) => {
       if (response.ok) {
         const jsonResponse = await response.json()
-        console.log(jsonResponse)
+        // console.log(jsonResponse)
        return jsonResponse.data 
       }
       else{
@@ -118,7 +118,7 @@ const productApi =  {
           statusText: response.statusText,
           url: response.url,
         };
-        console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
+        // console.log(`logserver http error ${JSON.stringify(httpErrorInfo)}`)
 
         const errorMessage = translateStatuseTOErrorMessage(httpErrorInfo.status)
         throw new Error(errorMessage);

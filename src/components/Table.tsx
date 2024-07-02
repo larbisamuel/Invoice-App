@@ -34,10 +34,10 @@ const Table: React.FC = () => {
   const handleAddItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log('New item:', newItem);
+    // console.log('New item:', newItem);
 
     productApi.createProduct(newItem).then((data)=>{
-      console.log(data);
+      // console.log(data);
       setItems([...items, data]);
       setShowAddItemModal(false);
     })
@@ -137,7 +137,7 @@ const Table: React.FC = () => {
       setItems(data);
       }
       catch(e){
-          console.log(`The Error ${e}`)
+          // console.log(`The Error ${e}`)
           navigate('/');
       }
 
