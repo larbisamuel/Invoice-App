@@ -4,7 +4,7 @@ import { Item } from "./Item";
 
 const  baseUrl = "https://invoice-api-4a9x.onrender.com";
 const  productUrl =  `${baseUrl}/api/product`;
-const token = localStorage.getItem('token');
+
 
 function translateStatuseTOErrorMessage(status: number) {
   switch (status) {
@@ -45,6 +45,7 @@ const productApi =  {
     },
 
     async createProduct(product: Item): Promise<Item>{
+      const token = localStorage.getItem('token');
       return await fetch(productUrl, {
         method: 'POST',
         headers: {
@@ -73,6 +74,7 @@ const productApi =  {
     },
 
     async updateProduct(product: Item): Promise<Item>{
+      const token = localStorage.getItem('token');
       return await fetch(`${productUrl}/product/${product.product_id}`, {
         method: 'PUT',
         headers: {
@@ -100,6 +102,7 @@ const productApi =  {
     })
     },
     async deleteProduct(product_id: string) {
+      const token = localStorage.getItem('token');
       return await fetch(`${productUrl}/product/${product_id}`, {
         method: 'DELETE',
         headers: {

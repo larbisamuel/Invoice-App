@@ -16,6 +16,7 @@ import productApi from './productApi';
 //   remainingStock: number;
 //   editing?: boolean;
 // }
+
 const Table: React.FC = () => {
   const ITEMS_PER_PAGE = 10; // Number of items to display per page
 
@@ -112,6 +113,7 @@ const Table: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem('token') 
     navigate('/');
     alert('You are logged out!')
   }
