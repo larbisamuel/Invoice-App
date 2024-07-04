@@ -1,5 +1,5 @@
 
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import './Newlogin.css';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import invoice_logo from '../assets/invoice_logo.jpg'
@@ -52,6 +52,15 @@ const Login: React.FC = () => {
             })
         
         }
+
+        useEffect(() => {
+             fetch("https://invoice-api-4a9x.onrender.com").then((response) => {
+                console.log(response);
+             });
+            return () => {
+                
+            };
+        }, []);
 
     return (
         <div className='login template d-flex justify-content-center align-items-center vh-100'>
